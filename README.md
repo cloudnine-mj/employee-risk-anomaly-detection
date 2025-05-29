@@ -83,7 +83,7 @@ employee_risk_anomaly_detection/
   - 구현 위치: `reporting/report_automation.py`
 - **다양한 알림 채널 연동**
   - Slack, Email(SES/SMTP), SMS(PagerDuty) 등
-- **Grafana/Prometheus 기반 운영 대시보드**
+- **Prometheus 기반 운영**
 
 
 
