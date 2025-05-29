@@ -68,7 +68,7 @@ if __name__ == '__main__':
     import argparse
     from config import load_config
     from data.db import DBClient
-    from features import FeatureExtractor
+    from features.features import FeatureExtractor
     from pipeline import run_pipeline  # if pipeline exists
 
     parser = argparse.ArgumentParser(description='Train and detect with IsolationForest')
