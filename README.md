@@ -62,7 +62,7 @@ employee_risk_anomaly_detection/
     - `features/sequence_features.py`  
     - `models/sequence_detector.py`
 
----
+
 
 ### 2. 분류 모델 도입 (Supervised + XAI)
 
@@ -73,7 +73,6 @@ employee_risk_anomaly_detection/
   - SHAP 기반 피처 중요도 시각화
   - 메서드: `classification.explain()`
 
----
 
 ### 3. 리포트 및 대시보드 자동화
 
@@ -86,7 +85,7 @@ employee_risk_anomaly_detection/
   - Slack, Email(SES/SMTP), SMS(PagerDuty) 등
 - **Grafana/Prometheus 기반 운영 대시보드**
 
----
+
 
 ### 4. 운영 안정성 및 거버넌스
 
