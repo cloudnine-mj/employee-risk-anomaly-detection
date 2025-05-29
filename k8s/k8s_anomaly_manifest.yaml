@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: anomaly-detection
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: anomaly-config
+  namespace: anomaly-detection
+data:
+  config.yaml: |
+    db_uri: "postgresql://username:password@hostname:5432/dbname"
+    lookback_days: 1
+    resource_weights:
+      confidential_doc: 5.0
+      financial_record: 3.0
+      public_info: 1.0
+    enable_sequence_detection: true
+    sequence_output_csv: "sequence_anomalies.csv"
+    embed_size: 50
+    lstm_units: 32
+    max_seq_len: 100
+    seq_epochs: 10
+    seq_batch_size: 32
+    enable_classification: true
+    classifier_model_path: "classifier_model.joblib"
+    classifier_output_csv: "classification_results.csv"
+    classifier_params:
+      n_estimators: 100
+      max_depth: 10
+      random_state: 42
+    model_path: "anomaly_model.joblib"
+    contamination: 0.01
+    n_estimators: 100
+    random_state: 42
+    drift_detection: true
+    output_csv: "anomaly_results.csv"
+    metrics_port: 8000
+    enable_retrain_scheduler: true
+    retrain_hourly: 24
+    retrain_event_threshold: 5
+    retrain_event_window: 10
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: anomaly-secret
+  namespace: anomaly-detection
+type: Opaque
+stringData:
+  slack_webhook_url: "https://hooks.slack.com/services/****"
+  alertmanager_url: "http://alertmanager.company.local:9093"
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: anomaly-detection-cron
+  namespace: anomaly-detection
+spec:
+  schedule: "0 * * * *"  # 매 시간 정각 실행
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: anomaly-detection
+              image: <YOUR_REGISTRY_URL>/anomaly-detection:latest
+              imagePullPolicy: IfNotPresent
+              command: ["python", "/app/pipeline.py", "--config", "/config/config.yaml"]
+              env:
+                - name: SLACK_WEBHOOK_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: anomaly-secret
+                      key: slack_webhook_url
+                - name: ALERTMANAGER_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: anomaly-secret
+                      key: alertmanager_url
+                - name: CONFIG_PATH
+                  value: "/config/config.yaml"
+              volumeMounts:
+                - name: config-volume
+                  mountPath: /config/config.yaml
+                  subPath: config.yaml
+          restartPolicy: OnFailure
+          volumes:
+            - name: config-volume
+              configMap:
+                name: anomaly-config

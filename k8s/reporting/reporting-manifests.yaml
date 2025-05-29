@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reporting-service
+  namespace: anomaly-detection
+  labels:
+    app: reporting
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: reporting
+  template:
+    metadata:
+      labels:
+        app: reporting
+    spec:
+      containers:
+        - name: reporting
+          image: <YOUR_REGISTRY_URL>/anomaly-report:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8501
+          env:
+            - name: CONFIG_PATH
+              value: "/config/config.yaml"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config/config.yaml
+              subPath: config.yaml
+      volumes:
+        - name: config-volume
+          configMap:
+            name: reporting-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: reporting-service
+  namespace: anomaly-detection
+  labels:
+    app: reporting
+spec:
+  type: ClusterIP
+  selector:
+    app: reporting
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8501
+      protocol: TCP
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: reporting-config
+  namespace: anomaly-detection
+data:
+  config.yaml: |
+    db_uri: "postgresql://username:password@hostname:5432/dbname"
+    lookback_days: 1
+    output_csv: "anomaly_results.csv"
+    sequence_output_csv: "sequence_anomalies.csv"
+    classification_output_csv: "classification_results.csv"
+    pptx_template: ""
+    monthly_pptx: "monthly_report.pptx"
+    monthly_excel: "monthly_report.xlsx"
+    metrics_port: 8000

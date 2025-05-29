@@ -4,22 +4,49 @@ db_uri: "postgresql://username:password@hostname:5432/dbname"
 # 로그 조회 기간 (일 단위)
 lookback_days: 1
 
-# 리소스별 가중치 (피처 엔지니어링용)
+# 1. 감사지원 특화 피처·시나리오 추가
+# 업무시간 외 로그인 패턴
+work_hours_start: "09:00"
+work_hours_end:   "18:00"
+enable_off_hours_ratio: true
+# 리소스별 중요도 가중치
 resource_weights:
   confidential_doc: 5.0
   financial_record: 3.0
   public_info: 1.0
+# 업무 프로세스 시퀀스 이상 탐지
+enable_sequence_detection: true       # Word2Vec+LSTM 시계열 모델
+sequence_output_csv: "sequence_anomalies.csv"
+# 시퀀스 모델 파라미터
+embed_size: 50
+lstm_units: 32
+max_seq_len: 100
+seq_epochs: 10
+seq_batch_size: 32
 
-# 이상 탐지 모델 경로 및 하이퍼파라미터
-model_path: "risk_iforest.joblib"
-contamination: 0.02
+# 2. 분류(Classification) 모델 도입
+enable_classification: true
+classifier_model_path: "classifier_model.joblib"
+classifier_output_csv: "classification_results.csv"
+# 분류 모델 하이퍼파라미터 (RandomForest 예시)
+classifier_params:
+  n_estimators: 100
+  max_depth: 10
+  random_state: 42
+# SHAP 설명 저장
+classifier_shap_max_display: 10
+classifier_shap_output_csv: "classification_shap.csv"
+
+# 3. 이상 탐지 모델 설정
+model_path: "anomaly_model.joblib"
+contamination: 0.01
 n_estimators: 100
 random_state: 42
-
 # 드리프트 감지 활성화 (river ADWIN)
 drift_detection: true
 
-# 알림 설정
+# 4. 알림 설정
+slack_webhook_url: "https://hooks.slack.com/services/XXXX/YYYY/ZZZZ"
 alertmanager_url: "http://alertmanager.company.local:9093"
 flap_window_minutes: 5
 flap_threshold: 3
@@ -28,14 +55,21 @@ mute_rules:
   - alertname: "RiskAnomaly"
     severity: "info"
 
-# 결과 저장 파일명
+# 5. 결과 저장 및 모니터링 설정
 output_csv: "anomaly_results.csv"
+metrics_port: 8000  # Prometheus 메트릭 서버 포트
 
-# Prometheus 메트릭 서버 포트
-metrics_port: 8000
-
-# 자동 재학습 스케줄러 설정
+# 6. 자동 재학습 스케줄러 설정
 enable_retrain_scheduler: true
 retrain_hourly: 24
 retrain_event_threshold: 5
 retrain_event_window: 10
+
+# 7. 운영 안정성·거버넌스 설정
+mlflow_tracking_uri: "http://mlflow.company.local:5000"
+mlflow_experiment: "AnomalyDetection"
+performance_thresholds:
+  precision: 0.8
+  recall: 0.7
+  f1: 0.75
+audit_db_uri: "postgresql://username:password@hostname:5432/auditdb"
