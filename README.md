@@ -85,6 +85,7 @@ employee_risk_anomaly_detection/
   - Slack, Email(SES/SMTP), SMS(PagerDuty) 등
 - **Prometheus 기반 운영**
 	- 구현 위치 metrics.py 
+
 | 구성                 | 위치                                                 | 설명                                                                 |
 |----------------------|------------------------------------------------------|----------------------------------------------------------------------|
 | **메트릭 수집 코드**      | `metrics.py`                                       | Prometheus용 지표 정의 및 수집 서버 (`start_http_server`) 실행         |
