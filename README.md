@@ -84,7 +84,13 @@ employee_risk_anomaly_detection/
 - **다양한 알림 채널 연동**
   - Slack, Email(SES/SMTP), SMS(PagerDuty) 등
 - **Prometheus 기반 운영**
-
+	- 구현 위치 metrics.py 
+| 구성                 | 위치                                                 | 설명                                                                 |
+|----------------------|------------------------------------------------------|----------------------------------------------------------------------|
+| **메트릭 수집 코드**      | `metrics.py`                                       | Prometheus용 지표 정의 및 수집 서버 (`start_http_server`) 실행         |
+| **지표 등록**          | `pipeline.py`<br>`risk_anomaly_detection.py` 등     | `@instrumented` 데코레이터로 실행 시간, 오류 수, anomaly 수 기록       |
+| **지표 노출 포트**       | `config.yaml`                                      | `metrics_port: 8000` 등으로 포트 지정 후 metrics 서버 실행              |
+| **서비스 외부 노출 (선택)** | `Kubernetes manifest (reporting-manifests.yaml)` 등 | 필요 시 `/metrics` 엔드포인트 Ingress 설정                              |
 
 
 ### 4. 운영 안정성 및 거버넌스
