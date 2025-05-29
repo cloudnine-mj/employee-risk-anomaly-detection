@@ -47,7 +47,7 @@ employee_risk_anomaly_detection/
 ├── requirements.txt                              # 의존성 목록
 ```
 
-## ✅ 주요 구성 요소 요약
+## ✅ 주요 구성 요소 설명
 
 ### 1. 감사지원 특화 피처 및 이상 탐지 모델 (Unsupervised + Sequence 기반)
 
