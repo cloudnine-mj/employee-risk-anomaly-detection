@@ -67,7 +67,7 @@ class RiskAnomalyDetector:
 if __name__ == '__main__':
     import argparse
     from config import load_config
-    from db import DBClient
+    from data.db import DBClient
     from features import FeatureExtractor
     from pipeline import run_pipeline  # if pipeline exists
 

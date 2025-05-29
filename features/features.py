@@ -41,7 +41,7 @@ class FeatureExtractor:
 if __name__ == '__main__':
     import argparse
     from datetime import datetime, timedelta
-    from db import DBClient
+    from data.db import DBClient
     from config import load_config
 
     parser = argparse.ArgumentParser(description='Generate feature vectors')

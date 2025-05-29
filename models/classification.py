@@ -103,8 +103,8 @@ class ClassificationModel:
 if __name__ == '__main__':
     import argparse
     from config import load_config
-    from db import DBClient
-    from features import FeatureExtractor
+    from data.db import DBClient
+    from features.features import FeatureExtractor
     
     parser = argparse.ArgumentParser(description='Train and evaluate classification model')
     parser.add_argument('--config', default='config.yaml')

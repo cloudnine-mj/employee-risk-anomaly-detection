@@ -111,7 +111,7 @@ class SequenceAnomalyDetector:
 
 # Example usage
 if __name__ == '__main__':
-    from db import DBClient
+    from data.db import DBClient
     from config import load_config
     import argparse
 
