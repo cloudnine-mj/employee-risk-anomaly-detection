@@ -3,8 +3,8 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 
 from config import load_config
-from sequence_detector import SequenceAnomalyDetector
-from db import DBClient
+from detector.sequence_detector import SequenceAnomalyDetector
+from data.db import DBClient
 import pandas as pd
 import logging
 

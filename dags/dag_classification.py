@@ -4,9 +4,9 @@ from airflow.operators.python import PythonOperator
 import logging
 
 from config import load_config
-from db import DBClient
-from features import FeatureExtractor
-from classification import ClassificationModel
+from data.db import DBClient
+from features.features import FeatureExtractor
+from detector.classification import ClassificationModel
 import pandas as pd
 
 # 기본 DAG 인수 설정

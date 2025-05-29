@@ -8,7 +8,7 @@ from data.db import DBClient
 from features.feature_extractor import FeatureExtractor
 from features.sequence_features import SequenceAnomalyDetector
 from features.classification_features import ClassificationModel
-from detector import RiskAnomalyDetector
+from detector.detector import RiskAnomalyDetector
 from alerting import AlertmanagerClient, filter_alerts, FlappingSuppressor, Deduplicator, MuteList
 from governance.governance import ModelRegistry, PerformanceMonitor, AuditLogger
 
