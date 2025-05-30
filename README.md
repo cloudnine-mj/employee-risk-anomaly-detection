@@ -74,13 +74,10 @@ employee_risk_anomaly_detection/
   - 메서드: `classification.explain()`
 
 
-### 3. 리포트 및 대시보드 자동화
+### 3. 리포트 자동화
 
 - **PPT/Excel 리포트 자동 생성**
   - 라이브러리: `python-pptx`, `openpyxl`
-- **인터랙티브 대시보드**
-  - Streamlit 기반 UI
-  - 구현 위치: `reporting/report_automation.py`
 - **다양한 알림 채널 연동**
   - Slack, Email(SES/SMTP), SMS(PagerDuty) 등
 - **Prometheus 기반 운영**
